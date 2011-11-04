@@ -2,3 +2,11 @@ A simple KML Parser.
 
 This script will parse your KML file, dump it into CSV and upload the file to the 
 Google docs account you specify.
+
+Pre-Requisites
+====================
+1) Beautiful Soup http://www.crummy.com/software/BeautifulSoup/
+2) Python gdata http://code.google.com/p/gdata-python-client/
+
+If you're on a Mac the best way to install Beautiful Soup is to download and use
+"python setup.py install" that worked for me!!
