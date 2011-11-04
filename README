@@ -1,0 +1,4 @@
+A simple KML Parser.
+
+This script will parse your KML file, dump it into CSV and upload the file to the 
+Google docs account you specify.
