@@ -25,9 +25,10 @@ class KmlParser(object):
     def __init__(self, kmlfile, csvfile):
         self.kmlfile = kmlfile
         self.csvfile = csvfile
+        self.outputfile = ''
         self.outputdata = []
     
-    def parse_kml(self): 
+    def ParseKml(self): 
         """
             parse_kml
         """
@@ -46,14 +47,14 @@ class KmlParser(object):
         except IOError as (errno, strerror):
             print "I/O error({0}): {1}".format(errno, strerror)
 
-    def write_csv(self):
+    def WriteCsv(self):
         """
             write_csv        
         """ 
-        outputfile = os.getcwd() + '/' + self.csvfile
+        self.outputfile = os.getcwd() + '/' + self.csvfile
         try:
-            out = open(outputfile,'w')
-            print 'Writing output to file ' + str(outputfile)
+            out = open(self.outputfile,'w')
+            print 'Writing output to file ', self.outputfile
             try:
                 fieldnames = sorted(self.outputdata[0].keys())
                 writer = csv.DictWriter(out, dialect = 'excel', 
@@ -63,30 +64,35 @@ class KmlParser(object):
                 writer.writerow(headers)
                 for row in self.outputdata:
                     writer.writerow(row)
+                print 'Output file ', self.outputfile, ' written' 
             finally:
                 out.close()
         except IOError as (errno, strerror):
             print "I/O error({0}): {1}".format(errno, strerror)
-        return outputfile
+        return self.outputfile
 
 
-    def upload(self, output_file):
+    def Upload(self, output_file):
         """
             upload      
         """
-        email = raw_input('Please enter your gmail address: ')
-        password = getpass.getpass('Please enter your gmail password: ')
-        client = gdata.docs.service.DocsService()
-        client.ClientLogin(email, password, 'kmltocsv')
-        uploaded_filename = self.csvfile[0:-4]
-        mediasource = gdata.data.MediaSource(file_path = output_file,
-             content_type = gdata.docs.service.SUPPORTED_FILETYPES['TXT'])
-        entry = client.Upload(mediasource, uploaded_filename)
-        if entry:
-            print 'Upload successful '
-            print 'Document now accessible at:', entry.GetAlternateLink().href
+        upload_prompt = raw_input('Would you like to upload your csv file to Google Docs? (y/n) ')
+        if upload_prompt == 'y':
+          email = raw_input('Please enter your gmail address: ')
+          password = getpass.getpass('Please enter your gmail password: ')
+          client = gdata.docs.service.DocsService()
+          client.ClientLogin(email, password, 'kmltocsv')
+          uploaded_filename = self.csvfile[0:-4]
+          mediasource = gdata.data.MediaSource(file_path = output_file,
+               content_type = gdata.docs.service.SUPPORTED_FILETYPES['TXT'])
+          entry = client.Upload(mediasource, uploaded_filename)
+          if entry:
+              print 'Upload successful '
+              print 'Document now accessible at:', entry.GetAlternateLink().href
+          else:
+              print 'Upload error'
         else:
-            print 'Upload error'
+	       print 'Please access your CSV file at', self.outputfile
 
 def main():
     """
@@ -109,9 +115,9 @@ def main():
     else:
         kmlparser = KmlParser(kmlfile=options.kmlfile, 
                              csvfile=options.csvfile)               
-        kmlparser.parse_kml()
-        upload_file = kmlparser.write_csv()
-        kmlparser.upload(upload_file)
+        kmlparser.ParseKml()
+        upload_file = kmlparser.WriteCsv()
+        kmlparser.Upload(upload_file)
 if __name__ == "__main__":
     main()
 
