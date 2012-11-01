@@ -11,6 +11,7 @@ Created by John Wesonga on 2011-11-03.
 import os
 import csv
 import getpass
+import logging
 from optparse import OptionParser
 
 from BeautifulSoup import BeautifulSoup
@@ -45,7 +46,7 @@ class KmlParser(object):
                     locationdata['name'] = text
             self.outputdata.append(locationdata)                    
         except IOError as (errno, strerror):
-            print "I/O error({0}): {1}".format(errno, strerror)
+            logging.error("I/O error(%d): %s" %(errno, strerror))
 
     def WriteCsv(self):
         """
@@ -68,7 +69,7 @@ class KmlParser(object):
             finally:
                 out.close()
         except IOError as (errno, strerror):
-            print "I/O error({0}): {1}".format(errno, strerror)
+            logging.error("I/O error(%d): %s" % (errno, strerror))
         return self.outputfile
 
 
@@ -87,12 +88,12 @@ class KmlParser(object):
                content_type = gdata.docs.service.SUPPORTED_FILETYPES['TXT'])
           entry = client.Upload(mediasource, uploaded_filename)
           if entry:
-              print 'Upload successful '
-              print 'Document now accessible at:', entry.GetAlternateLink().href
+              logging.info("Upload successful")
+              logging.info("Document now accessible at:", entry.GetAlternateLink().href)
           else:
               print 'Upload error'
         else:
-	       print 'Please access your CSV file at', self.outputfile
+	       logging.info("Please access your CSV file at %s" % self.outputfile)
 
 def main():
     """
