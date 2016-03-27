@@ -14,7 +14,7 @@ import getpass
 import logging
 from optparse import OptionParser
 
-from BeautifulSoup import BeautifulSoup
+from bs4 import BeautifulSoup
 import gdata.docs.service
 import gdata.docs.data
 
