@@ -44,7 +44,7 @@ class KmlParser(object):
                 for name in names:
                     text = name.find(text = True)
                     locationdata['name'] = text
-            self.outputdata.append(locationdata)                    
+                self.outputdata.append(locationdata)                    
         except IOError as (errno, strerror):
             logging.error("I/O error(%d): %s" %(errno, strerror))
 
