@@ -1,5 +1,10 @@
 A simple KML Parser.
 
+UPDATE:
+
+This code is pretty old and isn't actively maintained. I believe Google deprecated ClientLogin
+and as such the code won't upload the file. 
+
 This script will parse your KML file, dump it into CSV and upload the file to the 
 Google docs account you specify.
 
