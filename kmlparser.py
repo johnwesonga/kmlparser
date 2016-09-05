@@ -35,7 +35,7 @@ class KmlParser(object):
         """
         try:
             handler = open(self.kmlfile).read()
-            soup = BeautifulSoup(handler)
+            soup = BeautifulSoup(handler, "html.parser")
             for message in soup.findAll('placemark'):
                 locationdata = {}
                 coordinates = message.find('coordinates')
@@ -43,7 +43,7 @@ class KmlParser(object):
                 names = message.findAll('name')
                 for name in names:
                     text = name.find(text = True)
-                    locationdata['name'] = text
+                    locationdata['name'] = text.encode('utf-8')
                 self.outputdata.append(locationdata)                    
         except IOError as (errno, strerror):
             logging.error("I/O error(%d): %s" %(errno, strerror))
@@ -58,6 +58,7 @@ class KmlParser(object):
             print 'Writing output to file ', self.outputfile
             try:
                 fieldnames = sorted(self.outputdata[0].keys())
+                print fieldnames
                 writer = csv.DictWriter(out, dialect = 'excel', 
                         fieldnames = fieldnames, 
                         extrasaction='ignore', quoting=csv.QUOTE_NONNUMERIC)
@@ -118,7 +119,7 @@ def main():
                              csvfile=options.csvfile)               
         kmlparser.ParseKml()
         upload_file = kmlparser.WriteCsv()
-        kmlparser.Upload(upload_file)
+        #kmlparser.Upload(upload_file)
 if __name__ == "__main__":
     main()
 
