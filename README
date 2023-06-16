@@ -13,5 +13,5 @@ Pre-Requisites
 1) Beautiful Soup http://www.crummy.com/software/BeautifulSoup/
 2) Python gdata http://code.google.com/p/gdata-python-client/
 
-If you're on a Mac the best way to install Beautiful Soup is to download and use
-"python setup.py install" that worked for me!!
+# Installation
+pip install beautifulsoup
